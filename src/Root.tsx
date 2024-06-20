@@ -5,6 +5,7 @@ import {Routes, Route} from 'react-router-dom';
 import Usuario from "./pages/Cadastro/Usuario";
 import { AlertProvider } from "./components/Alert/ProviderAlert";
 
+import ListarLocalStorage from "./pages/Relatorio/RelatorioUsuarios";
 
 import {
     BrowserRouter,
@@ -27,7 +28,7 @@ const Root : FC<IProps> = () => {
                         <Routes>    
                             <Route path="/" element={<></>}/> 
                             <Route path="/cadastro/usuario" element={<Usuario/>}/>
-                            <Route path="/admin/pacientes" />
+                            <Route path="/admin/pacientes" element={<ListarLocalStorage/>}/>
 
                         </Routes>
                     </div>
