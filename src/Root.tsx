@@ -7,6 +7,7 @@ import {Routes, Route} from 'react-router-dom';
 import {
     BrowserRouter,
   } from "react-router-dom";
+import Usuario from "./pages/Cadastro/Usuario";
 
 
 interface IProps{
@@ -23,7 +24,7 @@ const Root : FC<IProps> = () => {
                     <div className="bg-tertiary flex flex-1">
                         <Routes>    
                             <Route path="/" element={<></>}/> 
-                            <Route path="/cadastro/usuario" />
+                            <Route path="/cadastro/usuario" element={<Usuario/>}/>
                             <Route path="/admin/pacientes" />
 
                         </Routes>
