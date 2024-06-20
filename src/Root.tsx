@@ -2,12 +2,13 @@ import React, {FC} from "react";
 import Aside from "./Aside";
 import MainHeader from "./components/MainHeader"; 
 import {Routes, Route} from 'react-router-dom';
+import Usuario from "./pages/Cadastro/Usuario";
+import { AlertProvider } from "./components/Alert/ProviderAlert";
 
 
 import {
     BrowserRouter,
   } from "react-router-dom";
-import Usuario from "./pages/Cadastro/Usuario";
 
 
 interface IProps{
@@ -17,7 +18,8 @@ interface IProps{
 const Root : FC<IProps> = () => {
     return( 
         <>  
-            <BrowserRouter> 
+            <BrowserRouter>
+               <AlertProvider>  
                 <Aside/>
                 <div className="flex flex-1 flex-col">
                     <MainHeader />
@@ -30,6 +32,7 @@ const Root : FC<IProps> = () => {
                         </Routes>
                     </div>
                 </div> 
+                </AlertProvider>
             </BrowserRouter>
         </>
     )
