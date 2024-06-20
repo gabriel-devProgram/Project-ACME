@@ -4,6 +4,7 @@ import InputTextCPF from '../../components/InputTextCPF'
 import { AiOutlineUserAdd } from 'react-icons/ai'
 import clsx  from 'clsx'
 import { AlertContext } from '../../components/Alert/ProviderAlert'
+import SubmitButton, { ESubmitButtonType } from '../../components/SubmitButton'
 
 
 
@@ -77,9 +78,46 @@ const Usuario: FC = () => {
       complemento: e.target.value
     }));
   }
-  return (
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData: { [key: string]: string } = {};
+    let id;
+
+    
+    Array.from(form.elements).forEach(element => {
+        const inputElement = element as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+        if (inputElement.name) {
+            formData[inputElement.name] = inputElement.value;
+        }
+    });
+    formData['endereco'] = `${endereco.logradouro || ''}${endereco.numero ? `, ${endereco.numero}` : ''}${endereco.complemento ? ` (${endereco.complemento})` : ''}${endereco.bairro ? `/ ${endereco.bairro}` : ''}${endereco.cidade ? `- ${endereco.cidade}` : ''}${endereco.estado ? `- ${endereco.estado}` : ''}`;
+
+    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+
+    if(usuarios.length == 0){
+      id = 1;
+    }else{
+      id = usuarios.at(-1).id + 1;
+    }
+
+    const cpfExiste = usuarios.some((usuario: { cpf: string }) => usuario.cpf === formData['cpf']);
+
+    if (cpfExiste) {
+        addAlert('CPF já cadastrado.');
+    } else {
+        formData['id'] = id;
+        usuarios.push(formData);
+        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        addAlert('Paciente cadastrado com sucesso!');
+        form.reset();
+    }
+}
+
+
+return (
     <div className='flex flex-1 flex-col m-5 p-5 bg-white border-2 border-quaternary rounded gap-4'>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="flex items-center mb-2 text-secondary font-bold">
           <AiOutlineUserAdd className="mr-2" />
           <h1>Inserir Paciente</h1>
@@ -87,7 +125,7 @@ const Usuario: FC = () => {
         <div className="flex flex-col">
           <h4 className="text-secondary mb-2 ">Nome do Paciente</h4>
           <InputText name="full_name" placeholder="Preencher com nome completo" spellCheck={false}
-            required type="text" validationMsg="Batata frita." />
+            required type="text" validationMsg="Preencha este campo." />
         </div>
         <div className="flex flex-row gap-3">
 
@@ -149,9 +187,13 @@ const Usuario: FC = () => {
       <input type="text" className={clsx('flex bg-white border h-10 rounded pl-2')} placeholder='Apto/Bloco/Casa 1' onChange={handleComplementoInput}  />
     </div>
         <div className="flex flex-1 justify-end mr-2 mt-4">
+          <SubmitButton className="w-20 h-11 mr-2" value="Resetar" type={ESubmitButtonType.reset} />
+          <SubmitButton className="w-28 h-11" value="Confirmar" type={ESubmitButtonType.submit} />
         </div>
       </form>
     </div>
   )
+
 }
+
 export default Usuario;
